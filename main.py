@@ -1,6 +1,7 @@
 import requests
 from bs4 import BeautifulSoup
 import webbrowser
+import time
 
 # Grabs all streamer links
 def get_streamer_links():
@@ -42,7 +43,9 @@ def get_completed_streamers():
     soup = BeautifulSoup(response.text, 'html.parser')
 
     completed = set()
-    in_progress = {}  # {streamer: "45%"} style
+    in_progress = {}  # {streamer: ("45%", minutes_remaining)}
+
+    default_minutes = 120  # 2 hours total
 
     status_tags = soup.select(".ScCardDropStatusText")
     for tag in status_tags:
@@ -59,9 +62,19 @@ def get_completed_streamers():
         if title == "Completed":
             completed.add(name)
         elif "%" in title:
-            in_progress[name] = title.split()[0]  # just "45%"
+            percent = int(title.split("%")[0])
+            remaining = default_minutes * (100 - percent) / 100
+            in_progress[name] = (f"{percent}%", int(remaining))
 
     return completed, in_progress
+
+# Waiting for completion
+def wait_for_drop_completion(name, minutes):
+    print(f"\n⏱️ Watching {name} for {minutes} more minutes...")
+    for i in range(minutes):
+        print(f"  > {i+1}/{minutes} minutes passed...")
+        time.sleep(60)  # wait 1 minute
+
 
 # Main loop with command interface
 def main():
@@ -76,22 +89,36 @@ def main():
             if name in completed:
                 extra = "(✅ Completed)"
             elif name in in_progress:
-                extra = f"(⏳ {in_progress[name]})"
+                extra = f"(⏳ {in_progress[name][0]} - est {in_progress[name][1]} min left)"
             else:
                 extra = ""
-
             print(f"{icon} {name}: {link} {extra}")
 
-        cmd = input("\n>> Type 'open' to watch an eligible stream, or 'exit' to quit: ").strip().lower()
+        cmd = input("\n>> Type 'open' to auto-watch and rotate, or 'exit' to quit: ").strip().lower()
         if cmd == "exit":
             print("👋 Exiting Twitch Drops Watcher.")
             break
         elif cmd == "open":
-            open_first_online_streamer(streamers, completed)
+            streamers = get_streamer_links()
+            completed, in_progress = get_completed_streamers()
+
+            for name, link, status in streamers:
+                if status == "ONLINE" and name not in completed:
+                    print(f"\n🎥 Opening {name}'s stream: {link}")
+                    webbrowser.open(link)
+
+                    # If progress exists, wait the estimated time
+                    if name in in_progress:
+                        wait_for_drop_completion(name, in_progress[name][1])
+                        print("\n🔁 Rechecking drop completion...")
+                        break  # restart loop after timer
+                    else:
+                        print("🕒 No progress info. Waiting 15 minutes...")
+                        time.sleep(900)
+                        break
         else:
             print("❓ Unknown command. Try 'open' or 'exit'.")
         print()
-
 
 if __name__ == "__main__":
     main()
