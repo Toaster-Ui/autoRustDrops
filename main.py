@@ -78,7 +78,7 @@ def wait_for_drop_completion(name, minutes):
 
 # Main loop with command interface
 def main():
-    print("📺 Twitch Drops Watcher is running! Type 'open' to watch a stream or 'exit' to quit.\n")
+    print("📺 Twitch Drops Watcher is running! Type 'open' to start or 'exit' to quit.\n")
 
     while True:
         streamers = get_streamer_links()
@@ -94,31 +94,38 @@ def main():
                 extra = ""
             print(f"{icon} {name}: {link} {extra}")
 
-        cmd = input("\n>> Type 'open' to auto-watch and rotate, or 'exit' to quit: ").strip().lower()
+        cmd = input("\n>> Type 'open' to auto-watch or 'exit' to quit: ").strip().lower()
         if cmd == "exit":
             print("👋 Exiting Twitch Drops Watcher.")
             break
         elif cmd == "open":
-            streamers = get_streamer_links()
-            completed, in_progress = get_completed_streamers()
+            while True:
+                streamers = get_streamer_links()
+                completed, in_progress = get_completed_streamers()
 
-            for name, link, status in streamers:
-                if status == "ONLINE" and name not in completed:
-                    print(f"\n🎥 Opening {name}'s stream: {link}")
-                    webbrowser.open(link)
+                # Find a valid stream
+                for name, link, status in streamers:
+                    if status == "ONLINE" and name not in completed:
+                        print(f"\n🎥 Opening {name}'s stream: {link}")
+                        webbrowser.open(link)
 
-                    # If progress exists, wait the estimated time
-                    if name in in_progress:
-                        wait_for_drop_completion(name, in_progress[name][1])
+                        if name in in_progress:
+                            wait_for_drop_completion(name, in_progress[name][1])
+                        else:
+                            print("🕒 No progress info. Waiting 15 minutes...")
+                            time.sleep(900)
                         print("\n🔁 Rechecking drop completion...")
-                        break  # restart loop after timer
-                    else:
-                        print("🕒 No progress info. Waiting 15 minutes...")
-                        time.sleep(900)
-                        break
+                        break  # after watching one, go back to top of 'open' loop
+                else:
+                    # No one online or eligible — wait and retry
+                    print("\n⏳ No eligible streamers online. Refreshing in 30 minutes...")
+                    time.sleep(1800)
+                    continue  # retry entire loop
+                break  # found and watched a streamer; break inner loop
         else:
             print("❓ Unknown command. Try 'open' or 'exit'.")
         print()
+
 
 if __name__ == "__main__":
     main()
