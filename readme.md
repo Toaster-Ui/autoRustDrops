@@ -17,7 +17,7 @@ Automatically track and manage Twitch streamers eligible for Rust drops — open
 
 ## 🚀 How to Use
 
-### Option 1: Download and Run the .exe
+### 📦 Option 1: Download and Run the .exe
 
 
 ### 📦 Option 2: Run with Python
@@ -28,3 +28,4 @@ Download from: https://www.python.org/downloads/
 #### 🔹 2. Install required libraries
 ```bash
 pip install requests beautifulsoup4
+
