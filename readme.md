@@ -34,16 +34,17 @@ pip install requests beautifulsoup4
 ```
 ---
 
-⚠️ Disclaimer
+⚠️ DISCLAIMER
 This project is a personal automation tool designed to help users manage Twitch Drops progress more easily.
 
-This project is not affiliated with Twitch or Facepunch Studios in any way.
+- This project is not affiliated with Twitch or Facepunch Studios in any way.
 
-It does not simulate viewership, interact with the Twitch player, or manipulate drop systems.
+- It does not simulate viewership, interact with the Twitch player, or manipulate drop systems.
 
-It simply automates the process of opening eligible Twitch streams based on public HTML content and estimated watch time.
+- It simply automates the process of opening eligible Twitch streams based on public HTML content and estimated watch time.
 
-Use of this tool is at your own risk. Be sure to comply with Twitch’s Terms of Service and Drops Program Guidelines.
+- Use of this tool is at your own risk. Be sure to comply with Twitch’s Terms of Service and Drops Program Guidelines.
+
 
 
 
