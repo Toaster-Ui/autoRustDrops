@@ -2,6 +2,8 @@
 
 Automatically track and manage Twitch streamers eligible for Rust drops — opens eligible live streams in your browser, estimates remaining drop watch time, and rotates through streamers until all drops are complete.
 
+---
+
 ## 🎯 Features
 
 - 🔍 Scrapes [twitch.facepunch.com](https://twitch.facepunch.com) to find current Rust drop streamers
@@ -28,4 +30,5 @@ Download from: https://www.python.org/downloads/
 #### 🔹 2. Install required libraries
 ```bash
 pip install requests beautifulsoup4
+
 
