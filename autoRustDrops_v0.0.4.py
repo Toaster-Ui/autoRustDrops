@@ -251,7 +251,7 @@ def main():
                         break  # after watching one, go back to top of 'open' loop
                 else:
                     # No one online or eligible — wait and retry
-                    print("\n⏳ No eligible streamers online. Refreshing in 30 minutes...")
+                    print("\n No eligible streamers online. Refreshing in 30 minutes...")
                     time.sleep(1800)
                     continue  # retry entire loop
                 break  # found and watched a streamer; break inner loop
