@@ -88,9 +88,9 @@ def main():
         for name, link, status in streamers:
             icon = "[ONLINE]" if status == "ONLINE" else "[OFFLINE]"
             if name in completed:
-                extra = "(✅ Completed)"
+                extra = "(Completed)"
             elif name in in_progress:
-                extra = f"(⏳ {in_progress[name][0]} - est {in_progress[name][1]} min left)"
+                extra = f"({in_progress[name][0]} - est {in_progress[name][1]} min left)"
             else:
                 extra = ""
             print(f"{icon} {name}: {link} {extra}")
