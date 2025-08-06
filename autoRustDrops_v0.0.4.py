@@ -3,7 +3,7 @@ from bs4 import BeautifulSoup
 import webbrowser
 import time
 
-#test
+#  testdasd
 # Grabs all streamer links
 def get_streamer_links():
     url = 'https://twitch.facepunch.com/#get-started'
